@@ -114,12 +114,12 @@ export async function deleteContractUser(contractId: string, userId: string) {
     });
 
     if (!user || user.contractId !== contractId) {
-        return { error: "Usuário não encontrado ou não pertence a este contrato." };
+        throw new Error("Usuário não encontrado ou não pertence a este contrato.");
     }
 
     // GESTOR não pode deletar outros GESTOR ou ADMIN
     if (user.role === "ADMIN" || user.role === "GESTOR") {
-        return { error: "Não é permitido deletar este tipo de usuário." };
+        throw new Error("Não é permitido deletar este tipo de usuário.");
     }
 
     await prisma.user.delete({
@@ -127,5 +127,4 @@ export async function deleteContractUser(contractId: string, userId: string) {
     });
 
     revalidatePath(`/contract-users?contractId=${contractId}`);
-    return { success: true };
 }

@@ -24,7 +24,7 @@ export async function createUser(data: any) {
     });
 
     if (existingUser) {
-        return { error: "Usuário já existe com este e-mail." };
+        return { success: false, error: "Usuário já existe com este e-mail." };
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -47,6 +47,18 @@ export async function updateUser(id: string, data: any) {
     await checkAdmin();
 
     const { name, email, role, contractId, password } = data;
+
+    // Verifica se o email já existe em outro usuário
+    const existingUser = await prisma.user.findFirst({
+        where: {
+            email,
+            NOT: { id }
+        }
+    });
+
+    if (existingUser) {
+        return { success: false, error: "Já existe outro usuário com este e-mail." };
+    }
 
     const updateData: any = {
         name,
@@ -76,5 +88,4 @@ export async function deleteUser(id: string) {
     });
 
     revalidatePath("/admin/users");
-    return { success: true };
 }

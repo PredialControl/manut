@@ -52,7 +52,7 @@ export function ScheduleClient({ preventiveTasks, correctiveCalls, contractId }:
 
   // Combinar e formatar todas as atividades
   const allActivities = useMemo(() => {
-    const activities = [];
+    const activities: any[] = [];
 
     // Adicionar preventivas
     if (filterType === "all" || filterType === "preventive") {

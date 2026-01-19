@@ -84,7 +84,7 @@ export default async function ContractUsersPage({ searchParams }: ContractUsersP
                         Gerencie os usuários com acesso a este contrato.
                     </p>
                 </div>
-                {userRole === "GESTOR" || userRole === "ADMIN" ? (
+                {(userRole === "GESTOR" || userRole === "ADMIN") && targetContractId ? (
                     <ContractUserDialog contractId={targetContractId} />
                 ) : null}
             </div>
@@ -121,8 +121,9 @@ export default async function ContractUsersPage({ searchParams }: ContractUsersP
                                     </Badge>
                                 </TableCell>
                                 <TableCell className="text-right space-x-2">
-                                    {(userRole === "GESTOR" || userRole === "ADMIN") && 
-                                     user.role !== "ADMIN" && 
+                                    {(userRole === "GESTOR" || userRole === "ADMIN") &&
+                                     targetContractId &&
+                                     user.role !== "ADMIN" &&
                                      user.role !== "GESTOR" ? (
                                         <>
                                             <ContractUserDialog contractId={targetContractId} user={user} />

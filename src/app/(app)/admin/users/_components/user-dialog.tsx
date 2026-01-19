@@ -54,7 +54,7 @@ export function UserDialog({ user, contracts }: UserDialogProps) {
             if (user) {
                 // Edit
                 const res = await updateUser(user.id, dataToSubmit);
-                if (res.error) throw new Error(res.error);
+                if (!res.success && res.error) throw new Error(res.error);
                 toast.success("Usuário atualizado com sucesso!");
             } else {
                 // Create
@@ -64,7 +64,7 @@ export function UserDialog({ user, contracts }: UserDialogProps) {
                     return;
                 }
                 const res = await createUser(dataToSubmit);
-                if (res.error) throw new Error(res.error);
+                if (!res.success && res.error) throw new Error(res.error);
                 toast.success("Usuário criado com sucesso!");
             }
             setOpen(false);
