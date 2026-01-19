@@ -1,0 +1,223 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  password      String
+  role          String    // Era Role
+  contract      Contract? @relation(fields: [contractId], references: [id])
+  contractId    String?
+  executions    Execution[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Contract {
+  id        String    @id @default(cuid())
+  name      String
+  acronym   String?   @unique
+  cnpj      String?
+  address   String?
+  sindico   String?   // Gestor
+  phone     String?   // Telefone
+  status    String?
+  imageUrl  String?   // Caminho para a imagem do contrato
+  deleted   Boolean   @default(false)
+  users     User[]
+  buildings Building[]
+  constructionItems ConstructionItem[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([deleted])
+}
+
+model Building {
+  id          String   @id @default(cuid())
+  name        String
+  contract    Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  contractId  String
+  floors      Floor[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Floor {
+  id        String     @id @default(cuid())
+  name      String
+  building  Building   @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+  buildingId String
+  locations Location[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Location {
+  id        String   @id @default(cuid())
+  name      String
+  floor     Floor    @relation(fields: [floorId], references: [id], onDelete: Cascade)
+  floorId   String
+  assets    Asset[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Asset {
+  id              String           @id @default(cuid())
+  name            String
+  location        Location         @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  locationId      String
+  status          String           @default("ATIVO")
+  tag             String?
+  model           String?          // Modelo do equipamento
+  manufacturer    String?          // Fabricante
+  quantity        Int?             @default(1) // Quantidade
+  type            String?          // Tipo/Categoria do equipamento
+  imageUrl        String?          // Caminho para a imagem do ativo
+  qrCode          String?          // Armazenar QR code em base64 ou URL
+  preventiveTasks PreventiveTask[]
+  correctiveCalls CorrectiveCall[]
+  reports         Report[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model CorrectiveCall {
+  id          String     @id @default(cuid())
+  omcNumber   String?    @unique // Ordem de Manutenção Corretiva
+  title       String
+  description String?
+  priority    String     // Era Priority
+  status      String     // Era Status
+  asset       Asset?     @relation(fields: [assetId], references: [id])
+  assetId     String?
+  executions  Execution[]
+  attachments Attachment[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model PreventiveTask {
+  id          String     @id @default(cuid())
+  ompNumber   String?    @unique // Ordem de Manutenção
+  description String
+  frequency   String     // Era Frequency
+  startDate   DateTime
+  checklist   String?    // Armazenado como JSON string
+  asset       Asset      @relation(fields: [assetId], references: [id])
+  assetId     String
+  executions  Execution[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Execution {
+  id               String          @id @default(cuid())
+  description      String
+  user             User            @relation(fields: [userId], references: [id])
+  userId           String
+  correctiveCall   CorrectiveCall? @relation(fields: [correctiveCallId], references: [id])
+  correctiveCallId String?
+  preventiveTask   PreventiveTask? @relation(fields: [preventiveTaskId], references: [id])
+  preventiveTaskId String?
+  attachments      Attachment[]
+  reports          Report[]
+  startTime        DateTime? // Substitui executedAt
+  endTime          DateTime? // Novo campo para o término
+  checklistResults String?    // Armazenado como JSON string
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+}
+
+model Report {
+  id          String    @id @default(cuid())
+  name        String
+  url         String
+  asset       Asset?    @relation(fields: [assetId], references: [id])
+  assetId     String?
+  execution   Execution? @relation(fields: [executionId], references: [id])
+  executionId String?
+  issuedAt    DateTime
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Attachment {
+  id               String          @id @default(cuid())
+  url              String
+  correctiveCall   CorrectiveCall? @relation(fields: [correctiveCallId], references: [id])
+  correctiveCallId String?
+  execution        Execution?      @relation(fields: [executionId], references: [id])
+  executionId      String?
+  createdAt        DateTime        @default(now())
+}
+
+// Modelos para Planos de Manutenção Padrão
+model MaintenancePlan {
+  id          String                    @id @default(cuid())
+  acronym     String                    @unique // Ex: 'BMB-REC'
+  description String                    // Ex: 'Bomba de recalque'
+  category    String                    
+  tasks       MaintenanceTaskTemplate[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MaintenanceTaskTemplate {
+  id          String   @id @default(cuid())
+  sistema     String   // Sistema (ex: 'Sistema Hidráulico', 'Sistema Elétrico')
+  atividade   String   // Atividade (ex: 'Verificar pressão', 'Limpar filtros')
+  periodicidade String // Periodicidade (ex: 'Mensal', 'Semanal', 'Trimestral')
+  responsavel String   // Responsável (ex: 'Técnico', 'Operador')
+  plan        MaintenancePlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  planId      String
+  checklist   ChecklistItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ChecklistItem {
+  id          String   @id @default(cuid())
+  description String
+  task        MaintenanceTaskTemplate @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId      String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Modelo para Itens/Chamados da Construtora
+model ConstructionItem {
+  id          String   @id @default(cuid())
+  number      String   @unique // Número do chamado (ex: 72246)
+  description String   // Pendência/Descrição
+  status      String   // Situação (EM_ANDAMENTO, FINALIZADO, IMPROCEDENTE, AGUARDANDO_VISTORIA, CONCLUIDO)
+  especialidade String? // Especialidade (CIVIL, ELETRICA, HIDRAULICA, SISTEMAS)
+  openedAt    DateTime // Data de abertura
+  deadline    DateTime? // Prazo
+  rescheduledDate DateTime? // Data reprogramação
+  feedback    String?  // Retorno/Observações
+  contract    Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  contractId  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([contractId])
+  @@index([status])
+  @@index([especialidade])
+}

@@ -1,0 +1,4 @@
+numero,descricao,status,data_abertura,prazo,retorno
+12345,Problema na torneira do banheiro,EM_ANDAMENTO,2025-01-15,2025-02-15,Aguardando peças
+12346,Lâmpada queimada no corredor,FINALIZADO,2025-01-10,2025-01-20,Substituída com sucesso
+12347,Vazamento na cozinha,AGUARDANDO_VISTORIA,2025-01-20,,Reportado pelo morador 
