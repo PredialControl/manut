@@ -73,8 +73,8 @@ export default async function AssetListPage({
   }));
 
   return (
-    <div className="flex-1 p-6 bg-background min-h-screen">
-      <div className="max-w-7xl mx-auto">
+    <div className="flex-1 p-6 h-full">
+      <div className="w-full">
         <AssetListClient data={formattedAssets} locations={locations} />
       </div>
     </div>

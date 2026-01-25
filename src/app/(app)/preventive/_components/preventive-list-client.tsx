@@ -11,10 +11,10 @@ interface PreventiveListClientProps {
 }
 
 const statuses = [
-  { value: "hoje", label: "Hoje", color: "bg-blue-500" },
-  { value: "pendente", label: "Pendente", color: "bg-red-500" },
-  { value: "proximas", label: "Próximas", color: "bg-yellow-500" },
-  { value: "executadas", label: "Executadas", color: "bg-green-500" },
+  { value: "hoje", label: "Hoje", color: "text-blue-500", bg: "bg-blue-500" },
+  { value: "pendente", label: "Vencidas", color: "text-red-500", bg: "bg-red-500" },
+  { value: "proximas", label: "Próximas", color: "text-amber-500", bg: "bg-amber-500" },
+  { value: "executadas", label: "Executadas", color: "text-green-500", bg: "bg-green-500" },
 ];
 
 export function PreventiveListClient({ data }: PreventiveListClientProps) {
@@ -31,23 +31,24 @@ export function PreventiveListClient({ data }: PreventiveListClientProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-2 bg-secondary/30 p-1.5 rounded-xl w-fit border border-border/30">
-        {statuses.map((status) => (
-          <Button
-            key={status.value}
-            variant="ghost"
-            className={cn(
-              "rounded-lg px-6 py-2.5 text-sm font-semibold transition-all duration-300",
-              currentStatus === status.value
-                ? "bg-background text-primary shadow-sm ring-1 ring-border/50"
-                : "text-muted-foreground hover:bg-background/50 hover:text-foreground"
-            )}
-            onClick={() => handleStatusChange(status.value)}
-          >
-            <span className={cn("mr-2 h-2 w-2 rounded-full", status.color, currentStatus === status.value ? "animate-pulse" : "opacity-60")} />
-            {status.label}
-          </Button>
-        ))}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center p-1.5 bg-[#0f172a]/60 rounded-full border border-white/5 backdrop-blur-md overflow-x-auto no-scrollbar max-w-full">
+          {statuses.map((status) => (
+            <button
+              key={status.value}
+              onClick={() => handleStatusChange(status.value)}
+              className={cn(
+                "flex items-center gap-2.5 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap",
+                currentStatus === status.value
+                  ? "bg-background/80 shadow-md text-foreground ring-1 ring-white/10"
+                  : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+              )}
+            >
+              <div className={cn("h-2.5 w-2.5 rounded-full shadow-sm", status.bg)} />
+              {status.label}
+            </button>
+          ))}
+        </div>
       </div>
       <DataTable columns={columns} data={data} />
     </div>

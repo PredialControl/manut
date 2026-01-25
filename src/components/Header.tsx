@@ -40,7 +40,7 @@ export default function Header({ isSidebarCollapsed, contractName, contractImage
   const pageSubtitle = getPageSubtitle(pathname);
 
   return (
-    <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-border bg-card px-6 shadow-sm">
+    <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-white/5 glass-effect px-6 shadow-sm backdrop-blur-md">
       {/* Mobile Menu */}
       <div className="flex items-center gap-4 md:hidden">
         <Sheet>
@@ -91,8 +91,8 @@ export default function Header({ isSidebarCollapsed, contractName, contractImage
       <div className="flex items-center gap-3">
         {/* Contract Info */}
         {contractName && contractId && (
-          <div className="hidden lg:flex items-center gap-3 px-3 py-1.5 bg-secondary rounded-lg border border-border">
-            <div className="relative h-8 w-8 rounded-full overflow-hidden bg-background border border-border">
+          <div className="hidden lg:flex items-center gap-3 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
+            <div className="relative h-8 w-8 rounded-full overflow-hidden bg-background/50 border border-white/10 shadow-inner">
               {contractImage ? (
                 <Image
                   src={contractImage}
@@ -110,8 +110,8 @@ export default function Header({ isSidebarCollapsed, contractName, contractImage
               )}
             </div>
             <div className="flex flex-col">
-              <span className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground">Condomínio</span>
-              <span className="text-xs font-semibold text-foreground leading-tight">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-primary/80">Condomínio</span>
+              <span className="text-sm font-medium text-foreground leading-tight tracking-tight">
                 {contractName}
               </span>
             </div>
@@ -154,16 +154,16 @@ export default function Header({ isSidebarCollapsed, contractName, contractImage
                   {(session.user as any)?.role && (
                     <p className="text-xs leading-none text-muted-foreground mt-1">
                       {(session.user as any).role === "ADMIN" ? "Administrador" :
-                       (session.user as any).role === "GESTOR" ? "Gestor" :
-                       (session.user as any).role === "MANUTENCAO" ? "Manutenção" :
-                       (session.user as any).role === "ACOMPANHAMENTO" ? "Acompanhamento" :
-                       (session.user as any).role}
+                        (session.user as any).role === "GESTOR" ? "Gestor" :
+                          (session.user as any).role === "MANUTENCAO" ? "Manutenção" :
+                            (session.user as any).role === "ACOMPANHAMENTO" ? "Acompanhamento" :
+                              (session.user as any).role}
                     </p>
                   )}
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem 
+              <DropdownMenuItem
                 className="cursor-pointer"
                 onClick={() => router.push("/profile")}
               >

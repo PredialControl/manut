@@ -23,7 +23,7 @@ export default async function AssetPage({ searchParams }: AssetPageProps) {
 
   return (
     <div className="flex-1 p-6 bg-background min-h-screen custom-scrollbar">
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="w-full space-y-6">
         <div className="flex items-center justify-end">
           <CreateHierarchyDialog contractId={contractId} />
         </div>

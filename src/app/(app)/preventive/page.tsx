@@ -129,8 +129,8 @@ export default async function PreventivePage({ searchParams }: PreventivePagePro
   }));
 
   return (
-    <div className="flex-1 space-y-8 p-10 pt-8 bg-background min-h-screen">
-      <div className="flex flex-col space-y-6">
+    <div className="flex-1 space-y-8 p-6 pt-6 bg-background min-h-screen">
+      <div className="flex flex-col space-y-6 w-full">
         <PreventiveListClient data={formattedTasks} />
       </div>
     </div>

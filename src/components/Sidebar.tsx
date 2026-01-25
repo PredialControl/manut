@@ -15,14 +15,14 @@ export default function Sidebar({
   return (
     <div
       className={cn(
-        "relative flex h-full flex-col border-r border-border bg-card transition-all duration-300 shadow-xl",
-        isCollapsed ? "w-16" : "w-64"
+        "relative flex h-full flex-col border-r border-white/5 glass-effect transition-all duration-300 z-50",
+        isCollapsed ? "w-20" : "w-72"
       )}
     >
-      <div className="flex-1">
+      <div className="flex-1 py-4">
         <SidebarNav isCollapsed={isCollapsed} />
       </div>
-      <div className="border-t border-border p-3 bg-transparent">
+      <div className="border-t border-white/5 p-4 bg-transparent">
         <Button
           onClick={toggleSidebar}
           variant="ghost"

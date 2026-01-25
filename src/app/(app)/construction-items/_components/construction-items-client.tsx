@@ -30,12 +30,12 @@ interface ConstructionItemsClientProps {
 }
 
 const statuses = [
-  { value: "all", label: "Todos", color: "bg-slate-500" },
-  { value: "CONCLUIDO", label: "Concluido", color: "bg-green-500" },
-  { value: "IMPROCEDENTE", label: "Improcedente", color: "bg-gray-500" },
-  { value: "EM_ANDAMENTO", label: "Em Andamento", color: "bg-blue-500" },
-  { value: "AGUARDANDO_VISTORIA", label: "Ag Vistoria", color: "bg-orange-500" },
-  { value: "FINALIZADO", label: "F. Indevido", color: "bg-red-500" },
+  { value: "all", label: "Todos", color: "text-foreground", bg: "bg-transparent" },
+  { value: "CONCLUIDO", label: "Concluido", color: "text-green-500", bg: "bg-green-500" },
+  { value: "IMPROCEDENTE", label: "Improcedente", color: "text-muted-foreground", bg: "bg-gray-500" },
+  { value: "EM_ANDAMENTO", label: "Em Andamento", color: "text-blue-500", bg: "bg-blue-500" },
+  { value: "AGUARDANDO_VISTORIA", label: "Ag Vistoria", color: "text-amber-500", bg: "bg-amber-500" },
+  { value: "FINALIZADO", label: "F. Indevido", color: "text-red-500", bg: "bg-red-500" },
 ];
 
 const especialidades = [
@@ -92,23 +92,21 @@ export function ConstructionItemsClient({ data }: ConstructionItemsClientProps) 
     <div className="space-y-6">
       {/* Filtros de Status */}
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-        <div className="flex flex-wrap items-center gap-1 bg-muted/50 p-1 rounded-lg border border-border/50">
+        <div className="flex items-center p-1.5 bg-[#0f172a]/60 rounded-full border border-white/5 backdrop-blur-md overflow-x-auto no-scrollbar max-w-full">
           {statuses.map((status) => (
-            <Button
+            <button
               key={status.value}
-              variant="ghost"
-              className={cn(
-                "rounded-md px-2 lg:px-4 py-2 text-xs lg:text-sm font-medium transition-all",
-                currentStatus === status.value
-                  ? "bg-background text-primary shadow-sm border border-border/50"
-                  : "text-muted-foreground hover:bg-background/50 hover:text-foreground"
-              )}
               onClick={() => handleStatusChange(status.value)}
+              className={cn(
+                "flex items-center gap-2.5 px-5 py-2.5 rounded-full text-xs font-medium transition-all duration-300 whitespace-nowrap",
+                currentStatus === status.value
+                  ? "bg-background/80 shadow-md text-foreground ring-1 ring-white/10"
+                  : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+              )}
             >
-              <span className={cn("mr-1 lg:mr-2 h-2 w-2 rounded-full", status.color)} />
-              <span className="hidden sm:inline">{status.label}</span>
-              <span className="sm:hidden">{status.label.split(' ')[0]}</span>
-            </Button>
+              <div className={cn("h-2.5 w-2.5 rounded-full shadow-sm", status.bg)} />
+              {status.label}
+            </button>
           ))}
         </div>
 
