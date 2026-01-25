@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { PreventiveListClient } from "./_components/preventive-list-client";
+import { Suspense } from "react";
 
 interface PreventivePageProps {
   searchParams: {
@@ -131,7 +132,9 @@ export default async function PreventivePage({ searchParams }: PreventivePagePro
   return (
     <div className="flex-1 space-y-8 p-6 pt-6 bg-background min-h-screen">
       <div className="flex flex-col space-y-6 w-full">
-        <PreventiveListClient data={formattedTasks} />
+        <Suspense fallback={<div>Carregando...</div>}>
+          <PreventiveListClient data={formattedTasks} />
+        </Suspense>
       </div>
     </div>
   );

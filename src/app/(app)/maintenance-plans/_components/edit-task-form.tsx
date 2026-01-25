@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormState } from "react-dom";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { toast } from "sonner";
 import { updateTask } from "../_actions/update-task";
 import { FormattedTask } from "../page";
@@ -26,7 +26,7 @@ const frequencies = [
   "SEMANAL", "QUINZENAL", "MENSAL", "BIMESTRAL", "TRIMESTRAL", "SEMESTRAL", "ANUAL"
 ];
 
-export function EditTaskForm({ task, onSuccess }: EditTaskFormProps) {
+function EditTaskFormContent({ task, onSuccess }: EditTaskFormProps) {
   const searchParams = useSearchParams();
   const contractId = searchParams.get('contractId');
   const initialState = { message: "", errors: {} };
@@ -45,17 +45,17 @@ export function EditTaskForm({ task, onSuccess }: EditTaskFormProps) {
     <form action={dispatch} className="space-y-4">
       <input type="hidden" name="id" value={task.id} />
       <input type="hidden" name="contractId" value={contractId || ""} />
-      
+
       <div>
         <p className="text-sm font-medium">{task.assetName} <span className="text-muted-foreground">({task.assetTag})</span></p>
         <p className="text-sm text-muted-foreground">{task.location}</p>
       </div>
-      
+
       <div>
         <Label htmlFor="description">Descrição da Tarefa</Label>
-        <Textarea 
-          id="description" 
-          name="description" 
+        <Textarea
+          id="description"
+          name="description"
           defaultValue={task.description}
         />
       </div>
@@ -80,5 +80,13 @@ export function EditTaskForm({ task, onSuccess }: EditTaskFormProps) {
         <Button type="submit">Salvar Alterações</Button>
       </div>
     </form>
+  );
+}
+
+export function EditTaskForm(props: EditTaskFormProps) {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <EditTaskFormContent {...props} />
+    </Suspense>
   );
 } 
