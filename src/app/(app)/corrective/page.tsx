@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { CorrectiveListClient } from "./_components/corrective-list-client";
 import { revalidatePath } from "next/cache";
+import { Suspense } from "react";
 
 interface CorrectivePageProps {
   searchParams: {
@@ -141,7 +142,9 @@ export default async function CorrectivePage({ searchParams }: CorrectivePagePro
   return (
     <div className="flex-1 space-y-8 p-6 pt-6 bg-background min-h-screen">
       <div className="flex flex-col space-y-6 w-full">
-        <CorrectiveListClient data={formattedCalls} contractId={contractId} />
+        <Suspense fallback={<div>Carregando...</div>}>
+          <CorrectiveListClient data={formattedCalls} contractId={contractId} />
+        </Suspense>
       </div>
     </div>
   );

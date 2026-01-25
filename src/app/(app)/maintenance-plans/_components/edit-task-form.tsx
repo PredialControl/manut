@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormState } from "react-dom";
-import { useEffect, Suspense } from "react";
+import { useEffect } from "react";
 import { toast } from "sonner";
 import { updateTask } from "../_actions/update-task";
 import { FormattedTask } from "../page";
@@ -26,7 +26,7 @@ const frequencies = [
   "SEMANAL", "QUINZENAL", "MENSAL", "BIMESTRAL", "TRIMESTRAL", "SEMESTRAL", "ANUAL"
 ];
 
-function EditTaskFormContent({ task, onSuccess }: EditTaskFormProps) {
+export function EditTaskForm({ task, onSuccess }: EditTaskFormProps) {
   const searchParams = useSearchParams();
   const contractId = searchParams.get('contractId');
   const initialState = { message: "", errors: {} };
@@ -80,13 +80,5 @@ function EditTaskFormContent({ task, onSuccess }: EditTaskFormProps) {
         <Button type="submit">Salvar Alterações</Button>
       </div>
     </form>
-  );
-}
-
-export function EditTaskForm(props: EditTaskFormProps) {
-  return (
-    <Suspense fallback={<div>Carregando...</div>}>
-      <EditTaskFormContent {...props} />
-    </Suspense>
   );
 } 

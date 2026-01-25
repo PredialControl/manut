@@ -2,7 +2,6 @@ import prisma from "@/lib/prisma";
 import { AssetListClient } from "./_components/asset-list-client";
 import { AssetColumn } from "./_components/columns";
 import { getMostFrequentPeriodicity } from "@/lib/periodicity-sorter";
-import { Suspense } from 'react';
 
 export default async function AssetListPage({
   searchParams,
@@ -76,9 +75,7 @@ export default async function AssetListPage({
   return (
     <div className="flex-1 p-6 h-full">
       <div className="w-full">
-        <Suspense fallback={<div>Carregando ativos...</div>}>
-          <AssetListClient data={formattedAssets} locations={locations} />
-        </Suspense>
+        <AssetListClient data={formattedAssets} locations={locations} />
       </div>
     </div>
   );

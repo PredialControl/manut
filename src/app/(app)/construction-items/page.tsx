@@ -4,6 +4,7 @@ import { StatusChart } from "./_components/status-chart";
 import { EspecialidadeChart } from "./_components/especialidade-chart";
 import { ItemsProgressChart } from "./_components/items-progress-chart";
 import { revalidatePath } from "next/cache";
+import { Suspense } from "react";
 
 interface ConstructionItemsPageProps {
   searchParams: {
@@ -145,7 +146,9 @@ export default async function ConstructionItemsPage({ searchParams }: Constructi
         </div>
 
         {/* Tabela */}
-        <ConstructionItemsClient data={formattedItems} />
+        <Suspense fallback={<div>Carregando...</div>}>
+          <ConstructionItemsClient data={formattedItems} />
+        </Suspense>
       </div>
     </div>
   );

@@ -2,9 +2,9 @@
 
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { storage } from '@/lib/storage';
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect } from 'react';
 
-function TestStorageContent() {
+export default function TestStoragePage() {
     // 1. Reactive Hook Test
     const [count, setCount] = useLocalStorage<number>('test-count', 0);
     const [text, setText] = useLocalStorage<string>('test-text', '');
@@ -86,13 +86,5 @@ function TestStorageContent() {
                 </p>
             </div>
         </div>
-    );
-}
-
-export default function TestStoragePage() {
-    return (
-        <Suspense fallback={<div>Carregando...</div>}>
-            <TestStorageContent />
-        </Suspense>
     );
 }

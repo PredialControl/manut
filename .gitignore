@@ -54,3 +54,6 @@ next-env.d.ts
 
 # problematic files
 nul
+
+.vercel
+.env*.local
