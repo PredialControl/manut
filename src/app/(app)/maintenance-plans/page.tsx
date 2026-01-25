@@ -2,6 +2,8 @@ import prisma from "@/lib/prisma";
 import { PlansClient } from "./_components/plans-client";
 import { AddPlanDialog } from "./_components/add-plan-dialog";
 
+export const dynamic = 'force-dynamic';
+
 export type ChecklistItem = {
   id: string;
   description: string;

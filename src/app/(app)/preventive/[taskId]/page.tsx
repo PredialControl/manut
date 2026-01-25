@@ -2,6 +2,8 @@ import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { PreventiveTaskDetails } from "./_components/preventive-task-details";
 
+export const dynamic = 'force-dynamic';
+
 interface PreventiveTaskPageProps {
   params: {
     taskId: string;

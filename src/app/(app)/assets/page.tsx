@@ -2,7 +2,9 @@ import { getAssetStructure } from "./_actions/get-asset-structure";
 import { AssetTree } from "./_components/asset-tree";
 import { CreateHierarchyDialog } from "./_components/create-hierarchy-dialog";
 
-interface AssetPageProps {
+export const dynamic = 'force-dynamic';
+
+interface AssetPageProps{
   searchParams: {
     contractId?: string;
   };

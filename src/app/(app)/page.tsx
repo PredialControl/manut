@@ -7,6 +7,8 @@ import { Trash } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
+export const dynamic = 'force-dynamic';
+
 export default async function ContractsPortalPage() {
   const session = await getServerSession(authOptions);
   const userRole = session?.user?.role;

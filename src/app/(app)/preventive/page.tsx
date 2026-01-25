@@ -2,6 +2,8 @@ import prisma from "@/lib/prisma";
 import { PreventiveListClient } from "./_components/preventive-list-client";
 import { Suspense } from "react";
 
+export const dynamic = 'force-dynamic';
+
 interface PreventivePageProps {
   searchParams: {
     contractId?: string;

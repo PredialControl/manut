@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+
+export const dynamic = 'force-dynamic';
 import { Trash2 } from "lucide-react";
 import { deleteContractUser } from "./_actions/manage-contract-users";
 

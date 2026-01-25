@@ -6,6 +6,8 @@ import { ItemsProgressChart } from "./_components/items-progress-chart";
 import { revalidatePath } from "next/cache";
 import { Suspense } from "react";
 
+export const dynamic = 'force-dynamic';
+
 interface ConstructionItemsPageProps {
   searchParams: {
     contractId?: string;

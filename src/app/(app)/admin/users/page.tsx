@@ -8,6 +8,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+
+export const dynamic = 'force-dynamic';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";

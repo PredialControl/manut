@@ -3,6 +3,8 @@ import { CorrectiveListClient } from "./_components/corrective-list-client";
 import { revalidatePath } from "next/cache";
 import { Suspense } from "react";
 
+export const dynamic = 'force-dynamic';
+
 interface CorrectivePageProps {
   searchParams: {
     contractId?: string;

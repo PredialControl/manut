@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { RestoreButtonClient } from "./_components/restore-button-client";
 
+export const dynamic = 'force-dynamic';
+
 export default async function TrashPage() {
     const deletedContracts = await prisma.contract.findMany({
         where: {

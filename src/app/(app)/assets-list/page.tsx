@@ -3,6 +3,8 @@ import { AssetListClient } from "./_components/asset-list-client";
 import { AssetColumn } from "./_components/columns";
 import { getMostFrequentPeriodicity } from "@/lib/periodicity-sorter";
 
+export const dynamic = 'force-dynamic';
+
 export default async function AssetListPage({
   searchParams,
 }: {
