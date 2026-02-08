@@ -15,7 +15,6 @@ import {
   FileText,
   Route,
   Calendar,
-  HardHat,
   Trash,
   Database,
   Users,
@@ -92,11 +91,6 @@ const contractRoutes: Route[] = [
     title: "Cronograma",
     href: "/schedule",
     icon: <Calendar className="h-5 w-5" />,
-  },
-  {
-    title: "Itens Construtora",
-    href: "/construction-items",
-    icon: <HardHat className="h-5 w-5" />,
   },
   {
     title: "Chamados",
