@@ -19,6 +19,7 @@ import {
   Trash,
   Database,
   Users,
+  MessageSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -88,6 +89,11 @@ const mainRoutes: Route[] = [
     title: "Itens Construtora",
     href: "/construction-items",
     icon: <HardHat className="h-5 w-5" />,
+  },
+  {
+    title: "Chamados",
+    href: "/tickets",
+    icon: <MessageSquare className="h-5 w-5" />,
   },
   {
     title: "Lixeira",

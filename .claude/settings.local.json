@@ -6,7 +6,14 @@
       "Bash(npx ts-node:*)",
       "Bash(netstat:*)",
       "Bash(findstr:*)",
-      "Bash(npx prisma db push)"
+      "Bash(npx prisma db push)",
+      "Bash(vercel env rm:*)",
+      "Bash(vercel env add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(vercel ls:*)",
+      "Bash(npx prisma migrate:*)",
+      "Bash(node -e:*)"
     ]
   }
 }
