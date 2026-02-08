@@ -46,56 +46,6 @@ const mainRoutes: Route[] = [
     icon: <Home className="h-5 w-5" />,
   },
   {
-    title: "Árvore de Ativos",
-    href: "/assets",
-    icon: <Archive className="h-5 w-5" />,
-  },
-  {
-    title: "Lista de Ativos",
-    href: "/assets-list",
-    icon: <List className="h-5 w-5" />,
-  },
-  {
-    title: "Corretivas",
-    href: "/corrective",
-    icon: <Wrench className="h-5 w-5" />,
-  },
-  {
-    title: "Preventivas",
-    href: "/preventive",
-    icon: <ShieldCheck className="h-5 w-5" />,
-  },
-  {
-    title: "Plano de Manutenção",
-    href: "/maintenance-plans",
-    icon: <ClipboardList className="h-5 w-5" />,
-  },
-  {
-    title: "Laudos",
-    href: "/reports",
-    icon: <FileText className="h-5 w-5" />,
-  },
-  {
-    title: "Rotas de inspeção",
-    href: "/inspection-routes",
-    icon: <Route className="h-5 w-5" />,
-  },
-  {
-    title: "Cronograma",
-    href: "/schedule",
-    icon: <Calendar className="h-5 w-5" />,
-  },
-  {
-    title: "Itens Construtora",
-    href: "/construction-items",
-    icon: <HardHat className="h-5 w-5" />,
-  },
-  {
-    title: "Chamados",
-    href: "/tickets",
-    icon: <MessageSquare className="h-5 w-5" />,
-  },
-  {
     title: "Lixeira",
     href: "/trash",
     icon: <Trash className="h-5 w-5" />,
@@ -147,6 +97,11 @@ const contractRoutes: Route[] = [
     title: "Itens Construtora",
     href: "/construction-items",
     icon: <HardHat className="h-5 w-5" />,
+  },
+  {
+    title: "Chamados",
+    href: "/tickets",
+    icon: <MessageSquare className="h-5 w-5" />,
   },
 ];
 

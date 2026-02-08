@@ -8,9 +8,16 @@ import { Badge } from "@/components/ui/badge";
 import { Contract } from "@prisma/client";
 import { DeleteContractDialog } from "./delete-contract-dialog";
 import { EditContractDialog } from "./edit-contract-dialog";
+import { AlertCircle, CheckCircle2, Clock } from "lucide-react";
 
 interface ContractCardProps {
-    contract: Contract;
+    contract: Contract & {
+        tickets?: Array<{
+            id: string;
+            status: string;
+            priority: string | null;
+        }>;
+    };
 }
 
 export function ContractCard({ contract }: ContractCardProps) {
@@ -27,6 +34,16 @@ export function ContractCard({ contract }: ContractCardProps) {
     };
 
     const imageUrl = getImageUrl(contract);
+
+    // Calcular estatísticas de chamados
+    const tickets = contract.tickets || [];
+    const totalTickets = tickets.length;
+    const openTickets = tickets.filter(t =>
+        ['itens_apontados', 'em_andamento', 'aguardando_vistoria'].includes(t.status)
+    ).length;
+    const urgentTickets = tickets.filter(t =>
+        t.priority === 'URGENTE' && ['itens_apontados', 'em_andamento', 'aguardando_vistoria'].includes(t.status)
+    ).length;
 
     // Função para obter a cor do badge baseada no status
     const getStatusBadge = (status: string | null) => {
@@ -98,6 +115,30 @@ export function ContractCard({ contract }: ContractCardProps) {
                         <p className="text-sm font-medium text-foreground font-mono text-[11px]">{contract.cnpj || 'Verificar'}</p>
                     </div>
                 </div>
+
+                {/* Resumo de Chamados */}
+                {totalTickets > 0 && (
+                    <div className="pt-3 border-t border-border/50">
+                        <span className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground block mb-2">Chamados</span>
+                        <div className="grid grid-cols-3 gap-2">
+                            <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-muted/30">
+                                <CheckCircle2 className="h-4 w-4 text-muted-foreground mb-1" />
+                                <span className="text-lg font-bold text-foreground">{totalTickets}</span>
+                                <span className="text-[9px] text-muted-foreground uppercase">Total</span>
+                            </div>
+                            <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-blue-500/10">
+                                <Clock className="h-4 w-4 text-blue-600 mb-1" />
+                                <span className="text-lg font-bold text-blue-600">{openTickets}</span>
+                                <span className="text-[9px] text-blue-600/70 uppercase">Abertos</span>
+                            </div>
+                            <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-red-500/10">
+                                <AlertCircle className="h-4 w-4 text-red-600 mb-1" />
+                                <span className="text-lg font-bold text-red-600">{urgentTickets}</span>
+                                <span className="text-[9px] text-red-600/70 uppercase">Urgentes</span>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 <div className="flex items-center gap-2 pt-4">
                     <Link href={`/assets?contractId=${contract.id}`} className="flex-1">

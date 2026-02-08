@@ -25,6 +25,15 @@ export default async function ContractsPortalPage() {
 
   const contracts = await prisma.contract.findMany({
     where: whereClause,
+    include: {
+      tickets: {
+        select: {
+          id: true,
+          status: true,
+          priority: true,
+        },
+      },
+    },
     orderBy: {
       name: "asc",
     },
