@@ -15,10 +15,12 @@ model User {
   email         String    @unique
   name          String?
   password      String
-  role          String    // Era Role
+  role          String    // ADMIN, MANAGER, TECHNICIAN, CLIENT
   contract      Contract? @relation(fields: [contractId], references: [id])
   contractId    String?
   executions    Execution[]
+  tickets       Ticket[]
+  userContracts UserContract[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }
@@ -33,24 +35,32 @@ model Contract {
   phone     String?   // Telefone
   status    String?
   imageUrl  String?   // Caminho para a imagem do contrato
+  type      String    @default("MAINTENANCE") // MAINTENANCE, TICKETS, RONDA, MIXED
   deleted   Boolean   @default(false)
   users     User[]
   buildings Building[]
   constructionItems ConstructionItem[]
+  tickets   Ticket[]
+  userContracts UserContract[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
   @@index([deleted])
+  @@index([type])
 }
 
 model Building {
   id          String   @id @default(cuid())
   name        String
+  address     String?
   contract    Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
   contractId  String
   floors      Floor[]
+  tickets     Ticket[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([contractId])
 }
 
 model Floor {
@@ -102,6 +112,7 @@ model CorrectiveCall {
   status      String     // Era Status
   asset       Asset?     @relation(fields: [assetId], references: [id])
   assetId     String?
+  originTicket Ticket?   // Ticket que originou essa OMC
   executions  Execution[]
   attachments Attachment[]
   createdAt   DateTime   @default(now())
@@ -220,4 +231,79 @@ model ConstructionItem {
   @@index([contractId])
   @@index([status])
   @@index([especialidade])
+}
+
+// ============================================
+// MÓDULO CHAMADOS - Novos Modelos
+// ============================================
+
+// Relacionamento Usuário-Contrato com Permissões
+model UserContract {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  contractId String
+
+  // Permissões por módulo
+  canAccessPreventive   Boolean @default(false)
+  canAccessCorrective   Boolean @default(false)
+  canAccessTickets      Boolean @default(false)
+  canAccessRondas       Boolean @default(false)
+  canAccessReports      Boolean @default(false)
+
+  // Permissões específicas de buildings (para Chamados)
+  allowedBuildings String[] @default([]) // Array de IDs de prédios
+
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([userId, contractId])
+  @@index([userId])
+  @@index([contractId])
+}
+
+// Tickets/Chamados (integra com CorrectiveCall)
+model Ticket {
+  id                String   @id @default(cuid())
+  number            String?  @unique // Número externo do ticket
+
+  building          Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+  buildingId        String
+
+  user              User     @relation(fields: [userId], references: [id])
+  userId            String
+
+  contract          Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  contractId        String
+
+  location          String   // Local específico dentro do prédio
+  description       String
+  photoUrls         String[] @default([]) // Array de URLs de fotos
+
+  status            String   // itens_apontados, em_andamento, improcedente, aguardando_vistoria, concluido, f_indevido
+  priority          String?  // BAIXA, MEDIA, ALTA, URGENTE
+  responsible       String?  // Condomínio, Construtora
+
+  deadline          DateTime?
+  reprogrammingDate DateTime?
+  reprogrammingHistory String? // JSON com histórico de reprogramações
+
+  constructorReturn String?  // Feedback/retorno da construtora
+
+  // INTEGRAÇÃO COM CORRETIVAS
+  correctiveCall    CorrectiveCall? @relation(fields: [correctiveCallId], references: [id])
+  correctiveCallId  String? @unique
+
+  isRegistered      Boolean @default(false) // Indica se foi convertido em OMC
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([contractId])
+  @@index([buildingId])
+  @@index([userId])
+  @@index([status])
+  @@index([responsible])
 }
