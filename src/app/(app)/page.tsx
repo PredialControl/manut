@@ -23,21 +23,32 @@ export default async function ContractsPortalPage() {
     whereClause.id = userContractId;
   }
 
-  const contracts = await prisma.contract.findMany({
-    where: whereClause,
-    include: {
-      tickets: {
-        select: {
-          id: true,
-          status: true,
-          priority: true,
+  let contracts;
+  try {
+    contracts = await prisma.contract.findMany({
+      where: whereClause,
+      include: {
+        tickets: {
+          select: {
+            id: true,
+            status: true,
+            priority: true,
+          },
         },
       },
-    },
-    orderBy: {
-      name: "asc",
-    },
-  });
+      orderBy: {
+        name: "asc",
+      },
+    });
+  } catch (error) {
+    // Fallback se a tabela Ticket não existir ainda
+    contracts = await prisma.contract.findMany({
+      where: whereClause,
+      orderBy: {
+        name: "asc",
+      },
+    });
+  }
 
   return (
     <div className="flex-1 space-y-10 p-10 pt-8 bg-background min-h-screen">
