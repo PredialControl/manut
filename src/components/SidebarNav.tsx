@@ -94,7 +94,7 @@ const contractRoutes: Route[] = [
   },
   {
     title: "Chamados",
-    href: "/tickets",
+    href: "/construction-items",
     icon: <MessageSquare className="h-5 w-5" />,
   },
 ];
