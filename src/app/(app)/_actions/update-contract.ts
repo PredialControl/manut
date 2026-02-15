@@ -54,7 +54,7 @@ export async function updateContract(prevState: any, formData: FormData) {
     })
 
     console.log("Contract updated successfully:", updatedContract);
-    revalidatePath("/")
+    revalidatePath("/gestao-contratos")
     return { message: "SUCCESS" }
   } catch (error: any) {
     console.error("Error updating contract:", error);

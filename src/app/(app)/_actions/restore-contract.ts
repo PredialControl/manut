@@ -19,7 +19,7 @@ export async function restoreContract(contractId: string) {
     });
 
     revalidatePath("/trash"); // Atualiza a lixeira
-    revalidatePath("/");       // Atualiza a página principal
+    revalidatePath("/gestao-contratos"); // Atualiza a página de contratos
     return { success: "Contrato restaurado com sucesso!" };
   } catch (error) {
     console.error(error);

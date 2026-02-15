@@ -39,7 +39,7 @@ export async function createContract(prevState: any, formData: FormData) {
       data: validatedFields.data,
     })
 
-    revalidatePath("/")
+    revalidatePath("/gestao-contratos")
     return { message: "SUCCESS" }
   } catch (error: any) {
     if (error.code === 'P2002' && error.meta?.target?.includes('acronym')) {

@@ -40,9 +40,14 @@ interface Route {
 
 const mainRoutes: Route[] = [
   {
-    title: "Portal de Contratos",
+    title: "Menu Principal",
     href: "/",
     icon: <Home className="h-5 w-5" />,
+  },
+  {
+    title: "Gestão de Contratos",
+    href: "/gestao-contratos",
+    icon: <Database className="h-5 w-5" />,
   },
   {
     title: "Lixeira",

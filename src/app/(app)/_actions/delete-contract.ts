@@ -18,7 +18,7 @@ export async function deleteContract(contractId: string) {
       },
     });
 
-    revalidatePath("/");
+    revalidatePath("/gestao-contratos");
     return { success: "Contrato arquivado com sucesso!" };
   } catch (error) {
     console.error(error);

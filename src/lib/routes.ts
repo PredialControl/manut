@@ -1,9 +1,15 @@
 export const pageRoutes = [
   {
-    title: "Portal de Contratos",
-    subtitle: "Gerencie todos os seus contratos em um só lugar",
+    title: "Menu Principal",
+    subtitle: "Selecione uma opção para começar",
     href: "/",
     icon: "Home",
+  },
+  {
+    title: "Gestão de Contratos",
+    subtitle: "Gerencie todos os seus contratos em um só lugar",
+    href: "/gestao-contratos",
+    icon: "Building2",
   },
   {
     title: "Árvore de Ativos",
