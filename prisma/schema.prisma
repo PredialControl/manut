@@ -37,6 +37,12 @@ model Contract {
   imageUrl  String?   // Caminho para a imagem do contrato
   type      String    @default("MAINTENANCE") // MAINTENANCE, TICKETS, RONDA, MIXED
   deleted   Boolean   @default(false)
+  // Campos do App Ronda
+  periodicidade     String?   // DIARIA, SEMANAL, QUINZENAL, MENSAL, etc.
+  tipoUso           String?   // RESIDENCIAL, NAO_RESIDENCIAL, RESIDENCIAL_E_NAO_RESIDENCIAL
+  quantidadeTorres  Int?
+  observacoes       String?
+  supabaseId        String?   @unique // ID do contrato no Supabase para vincular
   users     User[]
   buildings Building[]
   constructionItems ConstructionItem[]
@@ -47,6 +53,7 @@ model Contract {
 
   @@index([deleted])
   @@index([type])
+  @@index([supabaseId])
 }
 
 model Building {

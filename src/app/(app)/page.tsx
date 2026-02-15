@@ -35,12 +35,12 @@ const menuOptions: MenuOption[] = [
   {
     title: "Ronda de Inspeção",
     description: "Realize rondas de inspeção com registro fotográfico, relatórios de pendências e acompanhamento de visitas técnicas.",
-    href: "#",
+    href: "/ronda",
     icon: <ClipboardCheck className="h-10 w-10" />,
     color: "text-emerald-600 dark:text-emerald-400",
-    bgColor: "bg-emerald-500/10",
-    borderColor: "border-emerald-500/20",
-    available: false,
+    bgColor: "bg-emerald-500/10 group-hover:bg-emerald-500/20",
+    borderColor: "border-emerald-500/20 group-hover:border-emerald-500/40",
+    available: true,
   },
   {
     title: "Relatórios",
