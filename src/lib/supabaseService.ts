@@ -1,5 +1,5 @@
 import { supabase } from './supabase';
-import type { ContratoRonda, Ronda, AreaTecnica, FotoRonda, OutroItemCorrigido, AgendaItem, Laudo } from '@/types/ronda';
+import type { ContratoRonda, Ronda, AreaTecnica, FotoRonda, OutroItemCorrigido, AgendaItem, Laudo, ParecerTecnico, RelatorioPendencias } from '@/types/ronda';
 
 // ==================== CONTRATOS ====================
 export const contratoService = {
@@ -373,6 +373,76 @@ export const laudoService = {
 
   async delete(id: string): Promise<void> {
     const { error } = await supabase.from('laudos').delete().eq('id', id);
+    if (error) throw error;
+  },
+};
+
+// ==================== PARECER TÉCNICO ====================
+export const parecerService = {
+  async getByContrato(contratoId: string): Promise<ParecerTecnico[]> {
+    const { data, error } = await supabase
+      .from('pareceres_tecnicos')
+      .select('*')
+      .eq('contrato_id', contratoId)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    return data || [];
+  },
+
+  async create(parecer: Partial<ParecerTecnico>): Promise<string> {
+    const id = crypto.randomUUID();
+    const now = new Date().toISOString();
+    const { error } = await supabase.from('pareceres_tecnicos').insert({
+      id, ...parecer, created_at: now, updated_at: now,
+    });
+    if (error) throw error;
+    return id;
+  },
+
+  async update(id: string, updates: Partial<ParecerTecnico>): Promise<void> {
+    const { error } = await supabase.from('pareceres_tecnicos').update({
+      ...updates, updated_at: new Date().toISOString(),
+    }).eq('id', id);
+    if (error) throw error;
+  },
+
+  async delete(id: string): Promise<void> {
+    const { error } = await supabase.from('pareceres_tecnicos').delete().eq('id', id);
+    if (error) throw error;
+  },
+};
+
+// ==================== RELATÓRIO DE PENDÊNCIAS ====================
+export const relatorioPendenciasService = {
+  async getByContrato(contratoId: string): Promise<RelatorioPendencias[]> {
+    const { data, error } = await supabase
+      .from('relatorios_pendencias')
+      .select('*')
+      .eq('contrato_id', contratoId)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    return data || [];
+  },
+
+  async create(relatorio: Partial<RelatorioPendencias>): Promise<string> {
+    const id = crypto.randomUUID();
+    const now = new Date().toISOString();
+    const { error } = await supabase.from('relatorios_pendencias').insert({
+      id, ...relatorio, created_at: now, updated_at: now,
+    });
+    if (error) throw error;
+    return id;
+  },
+
+  async update(id: string, updates: Partial<RelatorioPendencias>): Promise<void> {
+    const { error } = await supabase.from('relatorios_pendencias').update({
+      ...updates, updated_at: new Date().toISOString(),
+    }).eq('id', id);
+    if (error) throw error;
+  },
+
+  async delete(id: string): Promise<void> {
+    const { error } = await supabase.from('relatorios_pendencias').delete().eq('id', id);
     if (error) throw error;
   },
 };

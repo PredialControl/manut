@@ -19,6 +19,13 @@ import {
   Database,
   Users,
   MessageSquare,
+  ClipboardCheck,
+  BarChart3,
+  Columns,
+  Award,
+  FileCheck,
+  FileBarChart,
+  Layers,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -50,9 +57,58 @@ const mainRoutes: Route[] = [
     icon: <Database className="h-5 w-5" />,
   },
   {
+    title: "Ronda de Inspeção",
+    href: "/ronda",
+    icon: <ClipboardCheck className="h-5 w-5" />,
+  },
+  {
     title: "Lixeira",
     href: "/trash",
     icon: <Trash className="h-5 w-5" />,
+  },
+];
+
+// Rotas para dentro de um contrato de ronda (/ronda/[contratoId]/...)
+const getRondaRoutes = (contratoId: string): Route[] => [
+  {
+    title: "Rondas",
+    href: `/ronda/${contratoId}`,
+    icon: <ClipboardCheck className="h-5 w-5" />,
+  },
+  {
+    title: "Dashboard",
+    href: `/ronda/${contratoId}/dashboard`,
+    icon: <BarChart3 className="h-5 w-5" />,
+  },
+  {
+    title: "Kanban",
+    href: `/ronda/${contratoId}/kanban`,
+    icon: <Columns className="h-5 w-5" />,
+  },
+  {
+    title: "Laudos",
+    href: `/ronda/${contratoId}/laudos`,
+    icon: <Award className="h-5 w-5" />,
+  },
+  {
+    title: "Parecer Técnico",
+    href: `/ronda/${contratoId}/parecer`,
+    icon: <FileCheck className="h-5 w-5" />,
+  },
+  {
+    title: "Relatórios",
+    href: `/ronda/${contratoId}/relatorios`,
+    icon: <FileBarChart className="h-5 w-5" />,
+  },
+  {
+    title: "Itens Compilados",
+    href: `/ronda/${contratoId}/itens-compilados`,
+    icon: <Layers className="h-5 w-5" />,
+  },
+  {
+    title: "Agenda",
+    href: `/ronda/${contratoId}/agenda`,
+    icon: <Calendar className="h-5 w-5" />,
   },
 ];
 
@@ -112,7 +168,24 @@ export function SidebarNav({ isCollapsed }: SidebarNavProps) {
   const [isDark, setIsDark] = useState(true);
   const { data: session } = useSession();
 
-  const routes = contractId ? [...contractRoutes] : [...mainRoutes];
+  // Detectar se estamos dentro de /ronda/[contratoId]
+  const rondaMatch = pathname.match(/^\/ronda\/([^/]+)/);
+  const rondaContratoId = rondaMatch ? rondaMatch[1] : null;
+
+  let routes: Route[];
+  if (rondaContratoId) {
+    // Dentro de um contrato de ronda - mostrar sidebar de ronda
+    routes = [
+      { title: "Menu Principal", href: "/", icon: <Home className="h-5 w-5" /> },
+      { title: "Contratos Ronda", href: "/ronda", icon: <ClipboardCheck className="h-5 w-5" /> },
+      ...getRondaRoutes(rondaContratoId),
+    ];
+  } else if (contractId) {
+    routes = [...contractRoutes];
+  } else {
+    routes = [...mainRoutes];
+  }
+
   const userRole = (session?.user as any)?.role;
 
   // Adicionar rota de Admin se for administrador (sempre, mesmo dentro de contrato)
@@ -141,6 +214,20 @@ export function SidebarNav({ isCollapsed }: SidebarNavProps) {
 
   // URLs que não devem receber contractId na query string
   const adminRoutes = ["/admin/users", "/profile"];
+
+  // Verificar se uma rota está ativa (para rotas de ronda, match exato ou subpath)
+  const isRouteActive = (href: string) => {
+    if (pathname === href) return true;
+    // Para a rota principal de rondas do contrato, só ativar em match exato
+    if (rondaContratoId && href === `/ronda/${rondaContratoId}`) {
+      return pathname === href;
+    }
+    // Para sub-rotas de ronda, ativar se pathname começa com o href
+    if (rondaContratoId && href.startsWith(`/ronda/${rondaContratoId}/`)) {
+      return pathname.startsWith(href);
+    }
+    return false;
+  };
   
   const getRouteUrl = (href: string) => {
     if (adminRoutes.includes(href)) {
@@ -228,7 +315,7 @@ export function SidebarNav({ isCollapsed }: SidebarNavProps) {
                     }}
                     className={cn(
                       "flex items-center justify-center mx-2 my-1 rounded-lg p-3 transition-all duration-200",
-                      pathname === route.href
+                      isRouteActive(route.href)
                         ? "bg-primary/10 text-primary border border-primary/20"
                         : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                     )}
@@ -248,7 +335,7 @@ export function SidebarNav({ isCollapsed }: SidebarNavProps) {
                   onClick={() => handleRouteClick(route.href)}
                   className={cn(
                     "w-full flex items-center gap-3 rounded-lg px-3 py-2.5 mx-3 my-1 transition-all duration-200 text-sm font-medium",
-                    pathname === route.href
+                    isRouteActive(route.href)
                       ? "bg-primary/10 text-primary border border-primary/20"
                       : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                   )}
@@ -262,7 +349,7 @@ export function SidebarNav({ isCollapsed }: SidebarNavProps) {
                   href={getRouteUrl(route.href)}
                   className={cn(
                     "flex items-center gap-3 rounded-lg px-3 py-2.5 mx-3 my-1 transition-all duration-200 text-sm font-medium",
-                    pathname === route.href
+                    isRouteActive(route.href)
                       ? "bg-primary/10 text-primary border border-primary/20"
                       : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                   )}
