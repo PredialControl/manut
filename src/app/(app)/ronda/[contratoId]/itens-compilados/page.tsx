@@ -14,6 +14,7 @@ import {
   AlertTriangle,
   XCircle,
   FileText,
+  Download,
 } from "lucide-react";
 import { contratoService, rondaService } from "@/lib/supabaseService";
 import type { ContratoRonda, Ronda, OutroItemCorrigido, FotoRonda } from "@/types/ronda";
@@ -104,11 +105,50 @@ export default function ItensCompiladosPage() {
 
   return (
     <div className="flex-1 space-y-6 p-6 md:p-10 pt-8 bg-background min-h-screen">
-      <div className="flex items-center gap-4">
-        <Link href={`/ronda/${contratoId}`}><Button variant="outline" size="sm"><ArrowLeft className="w-4 h-4 mr-2" /> Rondas</Button></Link>
-        <h1 className="text-xl md:text-2xl font-bold text-foreground flex items-center gap-2">
-          <Layers className="w-5 h-5 text-blue-600" /> Itens Compilados - {contrato.nome}
-        </h1>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link href={`/ronda/${contratoId}`}><Button variant="outline" size="sm"><ArrowLeft className="w-4 h-4 mr-2" /> Rondas</Button></Link>
+          <h1 className="text-xl md:text-2xl font-bold text-foreground flex items-center gap-2">
+            <Layers className="w-5 h-5 text-blue-600" /> Itens Compilados - {contrato.nome}
+          </h1>
+        </div>
+        <Button
+          variant="outline" size="sm"
+          onClick={async () => {
+            try {
+              const ExcelJS = (await import("exceljs")).default;
+              const { saveAs } = await import("file-saver");
+              const wb = new ExcelJS.Workbook();
+              const ws = wb.addWorksheet("Itens Compilados");
+              ws.addTable({
+                name: "ItensCompilados", ref: "A1", headerRow: true,
+                style: { theme: "TableStyleMedium2", showRowStripes: true },
+                columns: [
+                  { name: "Ronda", filterButton: true },
+                  { name: "Data", filterButton: true },
+                  { name: "Tipo", filterButton: true },
+                  { name: "Nome", filterButton: true },
+                  { name: "Local", filterButton: true },
+                  { name: "Descrição", filterButton: true },
+                  { name: "Status", filterButton: true },
+                  { name: "Prioridade", filterButton: true },
+                  { name: "Especialidade", filterButton: true },
+                ],
+                rows: itensFiltrados.map((i) => [
+                  i.rondaNome, i.rondaData ? new Date(i.rondaData + "T00:00:00").toLocaleDateString("pt-BR") : "-",
+                  i.tipo, i.nome, i.local, i.descricao, i.status, i.prioridade, i.especialidade,
+                ]),
+              });
+              ws.columns.forEach((c) => { c.width = 20; });
+              const buf = await wb.xlsx.writeBuffer();
+              saveAs(new Blob([buf], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }),
+                `Itens_Compilados_${contrato.nome.replace(/[^a-z0-9]/gi, "_")}_${new Date().toISOString().split("T")[0]}.xlsx`);
+            } catch (e) { console.error("Erro ao exportar Excel:", e); }
+          }}
+          disabled={itensFiltrados.length === 0}
+        >
+          <Download className="w-4 h-4 mr-2" /> Excel
+        </Button>
       </div>
 
       {/* Métricas */}

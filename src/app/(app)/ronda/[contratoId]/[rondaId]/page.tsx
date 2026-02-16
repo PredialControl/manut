@@ -25,6 +25,7 @@ import {
   Camera,
   Loader2,
   Users,
+  Download,
 } from "lucide-react";
 import {
   contratoService,
@@ -37,6 +38,7 @@ import type { ContratoRonda, Ronda, AreaTecnica, FotoRonda, OutroItemCorrigido, 
 import { AreaTecnicaModal } from "./_components/area-tecnica-modal";
 import { OutroItemModal } from "./_components/outro-item-modal";
 import { EditarRondaDialog } from "./_components/editar-ronda-dialog";
+import { downloadRelatorioPDF } from "@/lib/pdfReact";
 
 const NUMEROS_ROMANOS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV"];
 
@@ -290,6 +292,17 @@ export default function VisualizarRondaPage() {
           </div>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
+          <Button
+            onClick={async () => {
+              if (ronda && contrato) {
+                try { await downloadRelatorioPDF(ronda, contrato, ronda.areasTecnicas || []); }
+                catch (e) { console.error("Erro ao gerar PDF:", e); }
+              }
+            }}
+            variant="outline" size="sm"
+          >
+            <Download className="w-4 h-4 mr-1" /> PDF
+          </Button>
           <Button onClick={() => setEditarRondaOpen(true)} variant="outline" size="sm">
             <Edit className="w-4 h-4 mr-1" /> Editar
           </Button>

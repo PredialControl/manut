@@ -24,9 +24,11 @@ import {
   Search,
   FileText,
   Layers,
+  Download,
 } from "lucide-react";
 import { contratoService, relatorioPendenciasService } from "@/lib/supabaseService";
 import type { ContratoRonda, RelatorioPendencias } from "@/types/ronda";
+import { generateRelatorioPendenciasDOCX } from "@/lib/docxRelatorioPendencias";
 
 export default function RelatoriosPage() {
   const params = useParams();
@@ -123,6 +125,12 @@ export default function RelatoriosPage() {
               </div>
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                 <Button size="sm" variant="secondary" onClick={() => { setEditando(r); setFormTitulo(r.titulo); setModalOpen(true); }}><Edit className="w-4 h-4" /></Button>
+                <Button size="sm" variant="secondary" onClick={async () => {
+                  if (contrato) {
+                    try { await generateRelatorioPendenciasDOCX(r, contrato); }
+                    catch (e) { console.error("Erro ao gerar DOCX:", e); }
+                  }
+                }}><Download className="w-4 h-4" /></Button>
                 <Button size="sm" variant="destructive" onClick={() => handleDelete(r.id)}><Trash2 className="w-4 h-4" /></Button>
               </div>
             </Card>

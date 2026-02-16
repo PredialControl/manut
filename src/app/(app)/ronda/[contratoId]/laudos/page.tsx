@@ -25,9 +25,11 @@ import {
   AlertTriangle,
   XCircle,
   Calendar,
+  Download,
 } from "lucide-react";
 import { contratoService, laudoService } from "@/lib/supabaseService";
 import type { ContratoRonda, Laudo } from "@/types/ronda";
+import { downloadLaudosPDF } from "@/lib/pdfLaudos";
 
 const COLUNAS = [
   { id: "em-dia", label: "Em Dia", color: "bg-green-500", icon: CheckCircle },
@@ -128,9 +130,22 @@ export default function LaudosPage() {
             <Award className="w-5 h-5 text-blue-600" /> Laudos - {contrato.nome}
           </h1>
         </div>
-        <Button onClick={openNew} className="bg-green-600 hover:bg-green-700">
-          <Plus className="w-4 h-4 mr-2" /> Novo Laudo
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline" size="sm"
+            onClick={async () => {
+              if (contrato && laudos.length > 0) {
+                try { await downloadLaudosPDF(laudos, contrato.nome); }
+                catch (e) { console.error("Erro ao gerar PDF:", e); }
+              }
+            }}
+          >
+            <Download className="w-4 h-4 mr-2" /> PDF
+          </Button>
+          <Button onClick={openNew} className="bg-green-600 hover:bg-green-700">
+            <Plus className="w-4 h-4 mr-2" /> Novo Laudo
+          </Button>
+        </div>
       </div>
 
       {/* Kanban de Laudos */}

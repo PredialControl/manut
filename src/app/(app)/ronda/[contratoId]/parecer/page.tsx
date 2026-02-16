@@ -24,9 +24,11 @@ import {
   Trash2,
   Search,
   FileText,
+  Download,
 } from "lucide-react";
 import { contratoService, parecerService } from "@/lib/supabaseService";
 import type { ContratoRonda, ParecerTecnico } from "@/types/ronda";
+import { generateParecerTecnicoDOCX } from "@/lib/docxGenerator";
 
 export default function ParecerPage() {
   const params = useParams();
@@ -144,6 +146,12 @@ export default function ParecerPage() {
               {/* Hover overlay */}
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                 <Button size="sm" variant="secondary" onClick={() => openEdit(p)}><Edit className="w-4 h-4" /></Button>
+                <Button size="sm" variant="secondary" onClick={async () => {
+                  if (contrato) {
+                    try { await generateParecerTecnicoDOCX(p, contrato); }
+                    catch (e) { console.error("Erro ao gerar DOCX:", e); }
+                  }
+                }}><Download className="w-4 h-4" /></Button>
                 <Button size="sm" variant="destructive" onClick={() => handleDelete(p.id)}><Trash2 className="w-4 h-4" /></Button>
               </div>
             </Card>
