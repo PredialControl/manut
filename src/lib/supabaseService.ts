@@ -43,6 +43,42 @@ export const contratoService = {
       dataCriacao: data.data_criacao || data.created_at,
     };
   },
+
+  async create(contrato: Partial<ContratoRonda>): Promise<string> {
+    const id = crypto.randomUUID();
+    const { error } = await supabase.from('contratos').insert({
+      id,
+      nome: contrato.nome,
+      sindico: contrato.sindico,
+      endereco: contrato.endereco,
+      periodicidade: contrato.periodicidade,
+      status: contrato.status || 'EM IMPLANTACAO',
+      tipo_uso: contrato.tipo_uso || null,
+      quantidade_torres: contrato.quantidade_torres || null,
+      observacoes: contrato.observacoes || '',
+    });
+    if (error) throw error;
+    return id;
+  },
+
+  async update(id: string, updates: Partial<ContratoRonda>): Promise<void> {
+    const mapped: any = {};
+    if (updates.nome !== undefined) mapped.nome = updates.nome;
+    if (updates.sindico !== undefined) mapped.sindico = updates.sindico;
+    if (updates.endereco !== undefined) mapped.endereco = updates.endereco;
+    if (updates.periodicidade !== undefined) mapped.periodicidade = updates.periodicidade;
+    if (updates.status !== undefined) mapped.status = updates.status;
+    if (updates.tipo_uso !== undefined) mapped.tipo_uso = updates.tipo_uso || null;
+    if (updates.quantidade_torres !== undefined) mapped.quantidade_torres = updates.quantidade_torres || null;
+    if (updates.observacoes !== undefined) mapped.observacoes = updates.observacoes;
+    const { error } = await supabase.from('contratos').update(mapped).eq('id', id);
+    if (error) throw error;
+  },
+
+  async delete(id: string): Promise<void> {
+    const { error } = await supabase.from('contratos').delete().eq('id', id);
+    if (error) throw error;
+  },
 };
 
 // ==================== RONDAS ====================

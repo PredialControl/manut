@@ -5,8 +5,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import {
   Building2,
   ClipboardCheck,
-  FileBarChart,
-  Settings,
   ArrowRight,
 } from "lucide-react";
 
@@ -24,43 +22,23 @@ interface MenuOption {
 const menuOptions: MenuOption[] = [
   {
     title: "Gestão de Contratos",
-    description: "Gerencie todos os seus contratos, condomínios e unidades em um só lugar. Visualize status, chamados e acesse cada unidade.",
-    href: "/gestao-contratos",
-    icon: <Building2 className="h-10 w-10" />,
+    description: "Gerencie contratos, rondas de inspeção, laudos, pareceres técnicos, relatórios de pendências e acompanhamento de visitas.",
+    href: "/ronda",
+    icon: <ClipboardCheck className="h-10 w-10" />,
     color: "text-blue-600 dark:text-blue-400",
     bgColor: "bg-blue-500/10 group-hover:bg-blue-500/20",
     borderColor: "border-blue-500/20 group-hover:border-blue-500/40",
     available: true,
   },
   {
-    title: "Ronda de Inspeção",
-    description: "Realize rondas de inspeção com registro fotográfico, relatórios de pendências e acompanhamento de visitas técnicas.",
-    href: "/ronda",
-    icon: <ClipboardCheck className="h-10 w-10" />,
+    title: "Gestão de Manutenção",
+    description: "Gerencie manutenções preventivas, corretivas, chamados, ativos e planos de manutenção dos seus contratos.",
+    href: "/gestao-contratos",
+    icon: <Building2 className="h-10 w-10" />,
     color: "text-emerald-600 dark:text-emerald-400",
     bgColor: "bg-emerald-500/10 group-hover:bg-emerald-500/20",
     borderColor: "border-emerald-500/20 group-hover:border-emerald-500/40",
     available: true,
-  },
-  {
-    title: "Relatórios",
-    description: "Acesse relatórios gerenciais, dashboards de desempenho e indicadores de manutenção dos seus contratos.",
-    href: "#",
-    icon: <FileBarChart className="h-10 w-10" />,
-    color: "text-violet-600 dark:text-violet-400",
-    bgColor: "bg-violet-500/10",
-    borderColor: "border-violet-500/20",
-    available: false,
-  },
-  {
-    title: "Configurações",
-    description: "Gerencie usuários, permissões, preferências do sistema e configurações gerais da plataforma.",
-    href: "#",
-    icon: <Settings className="h-10 w-10" />,
-    color: "text-orange-600 dark:text-orange-400",
-    bgColor: "bg-orange-500/10",
-    borderColor: "border-orange-500/20",
-    available: false,
   },
 ];
 
