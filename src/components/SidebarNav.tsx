@@ -53,13 +53,13 @@ const mainRoutes: Route[] = [
   },
   {
     title: "Gestão de Contratos",
-    href: "/gestao-contratos",
-    icon: <Database className="h-5 w-5" />,
-  },
-  {
-    title: "Ronda de Inspeção",
     href: "/ronda",
     icon: <ClipboardCheck className="h-5 w-5" />,
+  },
+  {
+    title: "Gestão de Manutenção",
+    href: "/gestao-contratos",
+    icon: <Database className="h-5 w-5" />,
   },
   {
     title: "Lixeira",
@@ -177,7 +177,7 @@ export function SidebarNav({ isCollapsed }: SidebarNavProps) {
     // Dentro de um contrato de ronda - mostrar sidebar de ronda
     routes = [
       { title: "Menu Principal", href: "/", icon: <Home className="h-5 w-5" /> },
-      { title: "Contratos Ronda", href: "/ronda", icon: <ClipboardCheck className="h-5 w-5" /> },
+      { title: "Contratos", href: "/ronda", icon: <ClipboardCheck className="h-5 w-5" /> },
       ...getRondaRoutes(rondaContratoId),
     ];
   } else if (contractId) {

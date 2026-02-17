@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import {
@@ -323,85 +323,82 @@ export default function RondaPage() {
         {/* Grid de Contratos */}
         {!loading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filtered.map((contrato) => (
-              <Card
-                key={contrato.id}
-                className={`cursor-pointer transition-all duration-200 hover:shadow-md border-l-4 ${contrato.status === "IMPLANTADO" ? "border-l-green-500" : "border-l-yellow-500"}`}
-                onClick={() => router.push(`/ronda/${contrato.id}`)}
-              >
-                <CardHeader className="pb-3 px-3 sm:px-6">
-                  <div className="flex items-start justify-between gap-1">
-                    <CardTitle className="text-sm sm:text-lg font-semibold text-foreground flex items-center gap-1.5 sm:gap-2 min-w-0">
-                      <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0" />
-                      <span className="truncate">{contrato.nome}</span>
-                    </CardTitle>
-                    <div className="flex gap-1">
-                      <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); setEditingContrato(contrato); setIsModalOpen(true); }} className="h-8 w-8 p-0 hover:bg-blue-100 dark:hover:bg-blue-900">
-                        <Edit className="w-4 h-4 text-blue-600" />
-                      </Button>
-                      <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleDelete(contrato.id); }} className="h-8 w-8 p-0 hover:bg-red-100 dark:hover:bg-red-900">
-                        <Trash2 className="w-4 h-4 text-red-600" />
-                      </Button>
+            {filtered.map((contrato, index) => (
+              <div key={contrato.id} className="animate-in fade-in slide-in-from-bottom-8" style={{ animationDelay: `${index * 100}ms`, animationFillMode: "backwards" }}>
+                <Card
+                  className="group flex flex-col hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-2 transition-all duration-500 overflow-hidden border-border/50 bg-card p-0 gap-0 cursor-pointer"
+                  onClick={() => router.push(`/ronda/${contrato.id}`)}
+                >
+                  {/* Card Header with Image Overlay */}
+                  <div className="relative h-48 w-full bg-secondary/30 overflow-hidden group-hover:bg-secondary/40 transition-colors duration-500">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground/40">
+                      <Building2 className="w-16 h-16" />
+                      <span className="text-xs mt-2 uppercase tracking-widest font-bold">Contrato</span>
                     </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-2 sm:space-y-3 px-3 sm:px-6">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <User className="w-4 h-4" />
-                    <span className="font-medium">Síndico:</span>
-                    <span className="truncate">{contrato.sindico}</span>
-                  </div>
-                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                    <span className="font-medium">Endereço:</span>
-                    <span className="flex-1 line-clamp-2">{contrato.endereco}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Calendar className="w-4 h-4" />
-                    <span className="font-medium">Periodicidade:</span>
-                    <Badge className="bg-purple-600 text-white hover:bg-purple-700">
-                      {getPeriodicidadeLabel(contrato.periodicidade)}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <CheckCircle className="w-4 h-4" />
-                    <span className="font-medium">Status:</span>
-                    <Badge className={contrato.status === "IMPLANTADO" ? "bg-green-600 hover:bg-green-700 text-white" : "bg-yellow-600 hover:bg-yellow-700 text-white"}>
-                      {contrato.status === "IMPLANTADO" ? "Implantado" : "Em Implantação"}
-                    </Badge>
-                  </div>
-                  {contrato.tipo_uso && (
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Building className="w-4 h-4" />
-                      <span className="font-medium">Tipo de Uso:</span>
-                      <Badge variant="outline">
-                        {contrato.tipo_uso === "RESIDENCIAL" ? "Residencial" : contrato.tipo_uso === "NAO_RESIDENCIAL" ? "Não Residencial" : "Residencial e Não Residencial"}
+                    {/* Status Badge */}
+                    <div className="absolute top-4 right-4">
+                      <Badge className={contrato.status === "IMPLANTADO" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}>
+                        {contrato.status === "IMPLANTADO" ? "Implantado" : "Em Implantação"}
                       </Badge>
                     </div>
-                  )}
-                  {contrato.quantidade_torres && (
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Building2 className="w-4 h-4" />
-                      <span className="font-medium">Torres:</span>
-                      <Badge variant="outline">{contrato.quantidade_torres}</Badge>
+                    {/* Periodicidade Badge */}
+                    <div className="absolute bottom-4 left-4 bg-background/80 backdrop-blur-sm px-2 py-1 rounded-lg border border-border/50 shadow-sm">
+                      <span className="text-[10px] font-mono font-bold text-primary">{getPeriodicidadeLabel(contrato.periodicidade)}</span>
                     </div>
-                  )}
-                  {contrato.dataCriacao && (
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Clock className="w-4 h-4" />
-                      <span className="font-medium">Início:</span>
-                      <span>{new Date(contrato.dataCriacao).toLocaleDateString("pt-BR")}</span>
-                    </div>
-                  )}
-                  {contrato.observacoes && (
-                    <div className="pt-2 border-t border-border">
-                      <p className="text-sm text-muted-foreground">
-                        <span className="font-medium">Observações:</span> {contrato.observacoes}
+                  </div>
+
+                  <CardContent className="flex-grow p-6 space-y-4">
+                    <div className="space-y-1">
+                      <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors duration-300 truncate">
+                        {contrato.nome}
+                      </h3>
+                      <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary/40" />
+                        {contrato.endereco || "Endereço não informado"}
                       </p>
                     </div>
-                  )}
-                </CardContent>
-              </Card>
+
+                    <div className="grid grid-cols-2 gap-4 pt-2">
+                      <div className="space-y-1">
+                        <span className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Síndico</span>
+                        <p className="text-sm font-medium text-foreground truncate">{contrato.sindico || "N/A"}</p>
+                      </div>
+                      {contrato.quantidade_torres && (
+                        <div className="space-y-1">
+                          <span className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Torres</span>
+                          <p className="text-sm font-medium text-foreground">{contrato.quantidade_torres}</p>
+                        </div>
+                      )}
+                      {contrato.tipo_uso && !contrato.quantidade_torres && (
+                        <div className="space-y-1">
+                          <span className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Tipo</span>
+                          <p className="text-sm font-medium text-foreground truncate">
+                            {contrato.tipo_uso === "RESIDENCIAL" ? "Residencial" : contrato.tipo_uso === "NAO_RESIDENCIAL" ? "Não Residencial" : "Misto"}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {contrato.observacoes && (
+                      <div className="pt-3 border-t border-border/50">
+                        <p className="text-xs text-muted-foreground line-clamp-2">{contrato.observacoes}</p>
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-2 pt-4">
+                      <Button className="flex-1 h-11 rounded-xl shadow-lg shadow-primary/20" onClick={(e) => { e.stopPropagation(); router.push(`/ronda/${contrato.id}`); }}>
+                        Acessar Contrato
+                      </Button>
+                      <Button variant="outline" size="icon" className="h-11 w-11 rounded-xl" onClick={(e) => { e.stopPropagation(); setEditingContrato(contrato); setIsModalOpen(true); }}>
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                      <Button variant="outline" size="icon" className="h-11 w-11 rounded-xl text-destructive hover:bg-destructive/10" onClick={(e) => { e.stopPropagation(); handleDelete(contrato.id); }}>
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             ))}
           </div>
         )}
